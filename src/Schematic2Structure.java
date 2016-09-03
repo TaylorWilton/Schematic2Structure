@@ -1,3 +1,9 @@
+import com.flowpowered.nbt.CompoundMap;
+import com.flowpowered.nbt.CompoundTag;
+import com.flowpowered.nbt.Tag;
+import com.flowpowered.nbt.gui.NBTViewer;
+import com.flowpowered.nbt.stream.NBTInputStream;
+
 import java.io.*;
 import java.util.HashMap;
 
@@ -12,8 +18,14 @@ public class Schematic2Structure {
         String blocksFile = "blocks.csv";
         String propertiesFile = "properties.csv";
 
+        // TODO: Validation
+        String schematicFile = args[0];
+
+        // hashmaps for blocks & properties respectively
         HashMap<Integer,String> blockMap = new HashMap<>();
         HashMap<String,String> propertiesMap = new HashMap<>();
+
+        NBTInputStream schematicNBT;
 
 
         String line;
@@ -39,7 +51,6 @@ public class Schematic2Structure {
 
                 String[] data = line.split(",");
                 // the blockID that Minecraft uses
-                System.out.println(data[0]);
                 int id = Integer.parseInt(data[0]);
                 // the block name that Minecraft uses (ex minecraft:stone, rather than Stone)
                 String blockName = data[2];
@@ -64,6 +75,17 @@ public class Schematic2Structure {
                 propertiesMap.put(key,properties);
 
             }
+
+            FileInputStream inputStream = new FileInputStream(schematicFile);
+            schematicNBT = new NBTInputStream(inputStream);
+
+            Tag<CompoundMap> root = schematicNBT.readTag();
+
+            CompoundMap m = root.getValue();
+
+            System.out.println(m.values());
+
+
 
         } catch (FileNotFoundException ex){
             System.out.println("Unable to open file " + ex.getMessage());
