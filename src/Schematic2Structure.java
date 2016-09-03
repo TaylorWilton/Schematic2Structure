@@ -1,5 +1,6 @@
 import com.flowpowered.nbt.*;
 import com.flowpowered.nbt.stream.NBTInputStream;
+import com.flowpowered.nbt.stream.NBTOutputStream;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -89,6 +90,13 @@ public class Schematic2Structure {
             short width = (short) ((Tag) schematicMap.get("Width")).getValue();
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
+            ArrayList<ShortTag> sizeList = new ArrayList<>();
+            sizeList.add(new ShortTag("",length));
+            sizeList.add(new ShortTag("", height));
+            sizeList.add(new ShortTag("", width));
+
+            ListTag sizeListTag = new ListTag("size",ShortTag.class,sizeList);
+
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
             // this is done now, so that time isn't wasted reading all the blocks
@@ -132,6 +140,9 @@ public class Schematic2Structure {
                 // current block
                 Block current = (Block) (palette.values().toArray())[i];
 
+                if(current.getName() == null){
+                    continue;
+                }
 
                 // properties
                 String blockProperties = current.getProperties();
@@ -170,7 +181,6 @@ public class Schematic2Structure {
                 paletteHashes.add((Integer) aHashesArray);
             }
 
-
             // loop over all the blocks
             //Sorted by height (bottom to top) then length then width -- the index of the block at X,Y,Z is (Y×length + Z)×width + X
 
@@ -200,11 +210,25 @@ public class Schematic2Structure {
 
             ListTag blockListTag = new ListTag("blocks", CompoundTag.class, blockCompoundList);
 
+            CompoundMap structureMap = new CompoundMap();
+            structureMap.put("blocks",blockListTag);
+            structureMap.put("palette",paletteListTag);
+            structureMap.put("size",sizeListTag);
+            structureMap.put(new StringTag("author", "KingAmles"));
+            structureMap.put(new IntTag("version",1));
 
-            // Debug
-            // System.out.println(schematicMap.values());
+            CompoundTag structureTag = new CompoundTag("structure",structureMap);
 
-            System.out.println(blockListTag);
+            System.out.println(structureTag);
+
+            FileOutputStream fos = new FileOutputStream("output.nbt");
+            NBTOutputStream NBToutput = new NBTOutputStream(fos);
+
+            NBToutput.writeTag(structureTag);
+
+            NBToutput.flush();
+
+            NBToutput.close();
 
 
         } catch (FileNotFoundException ex) {
