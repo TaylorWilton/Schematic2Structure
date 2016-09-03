@@ -1,0 +1,219 @@
+Id value,Name value,Textid value
+0,Air,minecraft:air
+1,Stone,minecraft:stone
+2,Grass,minecraft:grass
+3,Dirt,minecraft:dirt
+4,Cobblestone,minecraft:cobblestone
+5,Oak Wood Plank,minecraft:planks
+6,Oak Sapling,minecraft:sapling
+7,Bedrock,minecraft:bedrock
+8,Flowing Water,minecraft:flowing_water
+9,Still Water,minecraft:water
+10,Flowing Lava,minecraft:flowing_lava
+11,Still Lava,minecraft:lava
+12,Sand,minecraft:sand
+13,Gravel,minecraft:gravel
+14,Gold Ore,minecraft:gold_ore
+15,Iron Ore,minecraft:iron_ore
+16,Coal Ore,minecraft:coal_ore
+17,Oak Wood,minecraft:log
+18,Oak Leaves,minecraft:leaves
+19,Sponge,minecraft:sponge
+20,Glass,minecraft:glass
+21,Lapis Lazuli Ore,minecraft:lapis_ore
+22,Lapis Lazuli Block,minecraft:lapis_block
+23,Dispenser,minecraft:dispenser
+24,Sandstone,minecraft:sandstone
+25,Note Block,minecraft:noteblock
+26,Bed,minecraft:bed
+27,Powered Rail,minecraft:golden_rail
+28,Detector Rail,minecraft:detector_rail
+29,Sticky Piston,minecraft:sticky_piston
+30,Cobweb,minecraft:web
+31,Dead Shrub,minecraft:tallgrass
+32,Dead Bush,minecraft:deadbush
+33,Piston,minecraft:piston
+34,Piston Head,minecraft:piston_head
+35,White Wool,minecraft:wool
+37,Dandelion,minecraft:yellow_flower
+38,Poppy,minecraft:red_flower
+39,Brown Mushroom,minecraft:brown_mushroom
+40,Red Mushroom,minecraft:red_mushroom
+41,Gold Block,minecraft:gold_block
+42,Iron Block,minecraft:iron_block
+43,Double Stone Slab,minecraft:double_stone_slab
+44,Stone Slab,minecraft:stone_slab
+45,Bricks,minecraft:brick_block
+46,TNT,minecraft:tnt
+47,Bookshelf,minecraft:bookshelf
+48,Moss Stone,minecraft:mossy_cobblestone
+49,Obsidian,minecraft:obsidian
+50,Torch,minecraft:torch
+51,Fire,minecraft:fire
+52,Monster Spawner,minecraft:mob_spawner
+53,Oak Wood Stairs,minecraft:oak_stairs
+54,Chest,minecraft:chest
+55,Redstone Wire,minecraft:redstone_wire
+56,Diamond Ore,minecraft:diamond_ore
+57,Diamond Block,minecraft:diamond_block
+58,Crafting Table,minecraft:crafting_table
+59,Wheat Crops,minecraft:wheat
+60,Farmland,minecraft:farmland
+61,Furnace,minecraft:furnace
+62,Burning Furnace,minecraft:lit_furnace
+63,Standing Sign Block,minecraft:standing_sign
+64,Oak Door Block,minecraft:wooden_door
+65,Ladder,minecraft:ladder
+66,Rail,minecraft:rail
+67,Cobblestone Stairs,minecraft:stone_stairs
+68,Wall-mounted Sign Block,minecraft:wall_sign
+69,Lever,minecraft:lever
+70,Stone Pressure Plate,minecraft:stone_pressure_plate
+71,Iron Door Block,minecraft:iron_door
+72,Wooden Pressure Plate,minecraft:wooden_pressure_plate
+73,Redstone Ore,minecraft:redstone_ore
+74,Glowing Redstone Ore,minecraft:lit_redstone_ore
+75,Redstone Torch (off,minecraft:unlit_redstone_torch
+76,Redstone Torch (on,minecraft:redstone_torch
+77,Stone Button,minecraft:stone_button
+78,Snow,minecraft:snow_layer
+79,Ice,minecraft:ice
+80,Snow Block,minecraft:snow
+81,Cactus,minecraft:cactus
+82,Clay,minecraft:clay
+83,Sugar Canes,minecraft:reeds
+84,Jukebox,minecraft:jukebox
+85,Oak Fence,minecraft:fence
+86,Pumpkin,minecraft:pumpkin
+87,Netherrack,minecraft:netherrack
+88,Soul Sand,minecraft:soul_sand
+89,Glowstone,minecraft:glowstone
+90,Nether Portal,minecraft:portal
+91,Jack o'Lantern,minecraft:lit_pumpkin
+92,Cake Block,minecraft:cake
+93,Redstone Repeater Block (off,minecraft:unpowered_repeater
+94,Redstone Repeater Block (on,minecraft:powered_repeater
+95,White Stained Glass,minecraft:stained_glass
+96,Wooden Trapdoor,minecraft:trapdoor
+97,Stone Monster Egg,minecraft:monster_egg
+98,Stone Bricks,minecraft:stonebrick
+99,Brown Mushroom Block,minecraft:brown_mushroom_block
+100,Red Mushroom Block,minecraft:red_mushroom_block
+101,Iron Bars,minecraft:iron_bars
+102,Glass Pane,minecraft:glass_pane
+103,Melon Block,minecraft:melon_block
+104,Pumpkin Stem,minecraft:pumpkin_stem
+105,Melon Stem,minecraft:melon_stem
+106,Vines,minecraft:vine
+107,Oak Fence Gate,minecraft:fence_gate
+108,Brick Stairs,minecraft:brick_stairs
+109,Stone Brick Stairs,minecraft:stone_brick_stairs
+110,Mycelium,minecraft:mycelium
+111,Lily Pad,minecraft:waterlily
+112,Nether Brick,minecraft:nether_brick
+113,Nether Brick Fence,minecraft:nether_brick_fence
+114,Nether Brick Stairs,minecraft:nether_brick_stairs
+115,Nether Wart,minecraft:nether_wart
+116,Enchantment Table,minecraft:enchanting_table
+117,Brewing Stand,minecraft:brewing_stand
+118,Cauldron,minecraft:cauldron
+119,End Portal,minecraft:end_portal
+120,End Portal Frame,minecraft:end_portal_frame
+121,End Stone,minecraft:end_stone
+122,Dragon Egg,minecraft:dragon_egg
+123,Redstone Lamp (inactive,minecraft:redstone_lamp
+124,Redstone Lamp (active,minecraft:lit_redstone_lamp
+125,Double Oak Wood Slab,minecraft:double_wooden_slab
+126,Oak Wood Slab,minecraft:wooden_slab
+127,Cocoa,minecraft:cocoa
+128,Sandstone Stairs,minecraft:sandstone_stairs
+129,Emerald Ore,minecraft:emerald_ore
+130,Ender Chest,minecraft:ender_chest
+131,Tripwire Hook,minecraft:tripwire_hook
+132,Tripwire,minecraft:tripwire_hook
+133,Emerald Block,minecraft:emerald_block
+134,Spruce Wood Stairs,minecraft:spruce_stairs
+135,Birch Wood Stairs,minecraft:birch_stairs
+136,Jungle Wood Stairs,minecraft:jungle_stairs
+137,Command Block,minecraft:command_block
+138,Beacon,minecraft:beacon
+139,Cobblestone Wall,minecraft:cobblestone_wall
+140,Flower Pot,minecraft:flower_pot
+141,Carrots,minecraft:carrots
+142,Potatoes,minecraft:potatoes
+143,Wooden Button,minecraft:wooden_button
+144,Mob Head,minecraft:skull
+145,Anvil,minecraft:anvil
+146,Trapped Chest,minecraft:trapped_chest
+147,Weighted Pressure Plate (light,minecraft:light_weighted_pressure_plate
+148,Weighted Pressure Plate (heavy,minecraft:heavy_weighted_pressure_plate
+149,Redstone Comparator (inactive,minecraft:unpowered_comparator
+150,Redstone Comparator (active,minecraft:powered_comparator
+151,Daylight Sensor,minecraft:daylight_detector
+152,Redstone Block,minecraft:redstone_block
+153,Nether Quartz Ore,minecraft:quartz_ore
+154,Hopper,minecraft:hopper
+155,Quartz Block,minecraft:quartz_block
+156,Quartz Stairs,minecraft:quartz_stairs
+157,Activator Rail,minecraft:activator_rail
+158,Dropper,minecraft:dropper
+159,White Stained Clay,minecraft:stained_hardened_clay
+160,White Stained Glass Pane,minecraft:stained_glass_pane
+161,Acacia Leaves,minecraft:leaves2
+162,Acacia Wood,minecraft:log2
+163,Acacia Wood Stairs,minecraft:acacia_stairs
+164,Dark Oak Wood Stairs,minecraft:dark_oak_stairs
+165,Slime Block,minecraft:slime
+166,Barrier,minecraft:barrier
+167,Iron Trapdoor,minecraft:iron_trapdoor
+168,Prismarine,minecraft:prismarine
+169,Sea Lantern,minecraft:sea_lantern
+170,Hay Bale,minecraft:hay_block
+171,White Carpet,minecraft:carpet
+172,Hardened Clay,minecraft:hardened_clay
+173,Block of Coal,minecraft:coal_block
+174,Packed Ice,minecraft:packed_ice
+175,Sunflower,minecraft:double_plant
+176,Free-standing Banner,minecraft:standing_banner
+177,Wall-mounted Banner,minecraft:wall_banner
+178,Inverted Daylight Sensor,minecraft:daylight_detector_inverted
+179,Red Sandstone,minecraft:red_sandstone
+180,Red Sandstone Stairs,minecraft:red_sandstone_stairs
+181,Double Red Sandstone Slab,minecraft:double_stone_slab2
+182,Red Sandstone Slab,minecraft:stone_slab2
+183,Spruce Fence Gate,minecraft:spruce_fence_gate
+184,Birch Fence Gate,minecraft:birch_fence_gate
+185,Jungle Fence Gate,minecraft:jungle_fence_gate
+186,Dark Oak Fence Gate,minecraft:dark_oak_fence_gate
+187,Acacia Fence Gate,minecraft:acacia_fence_gate
+188,Spruce Fence,minecraft:spruce_fence
+189,Birch Fence,minecraft:birch_fence
+190,Jungle Fence,minecraft:jungle_fence
+191,Dark Oak Fence,minecraft:dark_oak_fence
+192,Acacia Fence,minecraft:acacia_fence
+193,Spruce Door Block,minecraft:spruce_door
+194,Birch Door Block,minecraft:birch_door
+195,Jungle Door Block,minecraft:jungle_door
+196,Acacia Door Block,minecraft:acacia_door
+197,Dark Oak Door Block,minecraft:dark_oak_door
+198,End Rod,minecraft:end_rod
+199,Chorus Plant,minecraft:chorus_plant
+200,Chorus Flower,minecraft:chorus_flower
+201,Purpur Block,minecraft:purpur_block
+202,Purpur Pillar,minecraft:purpur_pillar
+203,Purpur Stairs,minecraft:purpur_stairs
+204,Purpur Double Slab,minecraft:purpur_double_slab
+205,Purpur Slab,minecraft:purpur_slab
+206,End Stone Bricks,minecraft:end_bricks
+207,Beetroot Block,minecraft:beetroots
+208,Grass Path,minecraft:grass_path
+209,End Gateway,minecraft:end_gateway
+210,Repeating Command Block,minecraft:repeating_command_block
+211,Chain Command Block,minecraft:chain_command_block
+212,Frosted Ice,minecraft:frosted_ice
+213,Magma Block,minecraft:magma_block
+214,Nether Wart Block,minecraft:nether_wart_block
+215,Red Nether Brick,minecraft:red_nether_brick
+216,Bone Block,minecraft:bone_block
+217,Structure Void,minecraft:structure_void
+255,Structure Block,minecraft:structure_block
