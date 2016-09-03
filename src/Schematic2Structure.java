@@ -2,7 +2,9 @@ import com.flowpowered.nbt.*;
 import com.flowpowered.nbt.stream.NBTInputStream;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Schematic2Structure {
@@ -158,12 +160,51 @@ public class Schematic2Structure {
 
             }
             ListTag paletteListTag = new ListTag("palette", CompoundTag.class, paletteCompoundList);
+            ArrayList<CompoundTag> blockCompoundList = new ArrayList<>();
+
+            Object[] hashesArray = palette.keySet().toArray();
+
+            ArrayList<Integer> paletteHashes = new ArrayList<>();
+
+            for (Object aHashesArray : hashesArray) {
+                paletteHashes.add((Integer) aHashesArray);
+            }
+
+
+            // loop over all the blocks
+            //Sorted by height (bottom to top) then length then width -- the index of the block at X,Y,Z is (Y×length + Z)×width + X
+
+            for (int z = 0; z < length; z++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        int position = (y * length + z) * width + x;
+                        Block current = structureBlocks.get(position);
+
+                        int index = paletteHashes.indexOf(current.hashCode());
+
+                        CompoundMap itemMap = new CompoundMap();
+                        ArrayList<IntTag> pos = new ArrayList<>(3);
+                        pos.add(new IntTag("", z));
+                        pos.add(new IntTag("", y));
+                        pos.add(new IntTag("", x));
+
+                        itemMap.put("pos", new ListTag("pos", IntTag.class, pos));
+                        itemMap.put("state", new IntTag("state", index));
+
+                        CompoundTag blockCompound = new CompoundTag("", itemMap);
+
+                        blockCompoundList.add(blockCompound);
+                    }
+                }
+            }
+
+            ListTag blockListTag = new ListTag("blocks", CompoundTag.class, blockCompoundList);
 
 
             // Debug
             // System.out.println(schematicMap.values());
 
-            System.out.println(paletteListTag);
+            System.out.println(blockListTag);
 
 
         } catch (FileNotFoundException ex) {
