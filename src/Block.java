@@ -6,7 +6,7 @@ public class Block {
     private String properties;
     private String key;
     private String blockProperties;
-    private byte data;
+    private int data;
     private String name;
 
     /**
@@ -16,7 +16,7 @@ public class Block {
      * @param name - name of the block
      * @param data - any block data
      */
-    public Block(int id, String name, byte data) {
+    public Block(int id, String name, int data) {
         this.id = id;
         this.name = name;
         this.data = data;
@@ -40,7 +40,7 @@ public class Block {
         return ((id * 10) + data) * 10;
     }
 
-    public byte getData() {
+    public int getData() {
         return data;
     }
 

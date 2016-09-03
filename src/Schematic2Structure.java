@@ -3,9 +3,7 @@ import com.flowpowered.nbt.stream.NBTInputStream;
 import com.flowpowered.nbt.stream.NBTOutputStream;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Schematic2Structure {
@@ -91,11 +89,12 @@ public class Schematic2Structure {
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
             ArrayList<ShortTag> sizeList = new ArrayList<>();
-            sizeList.add(new ShortTag("",length));
+            sizeList.add(new ShortTag("", length));
             sizeList.add(new ShortTag("", height));
             sizeList.add(new ShortTag("", width));
 
-            ListTag sizeListTag = new ListTag("size",ShortTag.class,sizeList);
+
+            ListTag sizeListTag = new ListTag("size", ShortTag.class, sizeList);
 
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
@@ -105,12 +104,14 @@ public class Schematic2Structure {
                 return;
             }
 
+
+            // note - java byte's are signed...
             byte[] schematicBlocks = (byte[]) ((Tag) schematicMap.get("Blocks")).getValue();
             byte[] schematicBlockData = (byte[]) ((Tag) schematicMap.get("Data")).getValue();
 
             for (int i = 0; i < schematicBlocks.length; i++) {
-                int blockId = schematicBlocks[i];
-                byte data = schematicBlockData[i];
+                int blockId = schematicBlocks[i] & 0xff;
+                int data = schematicBlockData[i] & 0xff;
 
                 String name = blockMap.get(blockId);
 
@@ -139,10 +140,6 @@ public class Schematic2Structure {
             for (int i = 0; i < palette.values().toArray().length; i++) {
                 // current block
                 Block current = (Block) (palette.values().toArray())[i];
-
-                if(current.getName() == null){
-                    continue;
-                }
 
                 // properties
                 String blockProperties = current.getProperties();
@@ -198,6 +195,7 @@ public class Schematic2Structure {
                         pos.add(new IntTag("", y));
                         pos.add(new IntTag("", x));
 
+
                         itemMap.put("pos", new ListTag("pos", IntTag.class, pos));
                         itemMap.put("state", new IntTag("state", index));
 
@@ -211,18 +209,18 @@ public class Schematic2Structure {
             ListTag blockListTag = new ListTag("blocks", CompoundTag.class, blockCompoundList);
 
             CompoundMap structureMap = new CompoundMap();
-            structureMap.put("blocks",blockListTag);
-            structureMap.put("palette",paletteListTag);
-            structureMap.put("size",sizeListTag);
+            structureMap.put("blocks", blockListTag);
+            structureMap.put("palette", paletteListTag);
+            structureMap.put("size", sizeListTag);
             structureMap.put(new StringTag("author", "KingAmles"));
-            structureMap.put(new IntTag("version",1));
+            structureMap.put(new IntTag("version", 1));
 
-            CompoundTag structureTag = new CompoundTag("structure",structureMap);
+            CompoundTag structureTag = new CompoundTag("structure", structureMap);
 
             System.out.println(structureTag);
 
             FileOutputStream fos = new FileOutputStream("output.nbt");
-            NBTOutputStream NBToutput = new NBTOutputStream(fos);
+            NBTOutputStream NBToutput = new NBTOutputStream(fos, true);
 
             NBToutput.writeTag(structureTag);
 
