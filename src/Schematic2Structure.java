@@ -12,9 +12,10 @@ public class Schematic2Structure {
 
     /**
      * Main Method
+     *
      * @param args - the file name of the schematic
      */
-    public static void main(String args[]){
+    public static void main(String args[]) {
         String blocksFile = "blocks.csv";
         String propertiesFile = "properties.csv";
 
@@ -22,8 +23,8 @@ public class Schematic2Structure {
         String schematicFile = args[0];
 
         // hashmaps for blocks & properties respectively
-        HashMap<Integer,String> blockMap = new HashMap<>();
-        HashMap<String,String> propertiesMap = new HashMap<>();
+        HashMap<Integer, String> blockMap = new HashMap<>();
+        HashMap<String, String> propertiesMap = new HashMap<>();
 
         NBTInputStream schematicNBT;
 
@@ -38,7 +39,7 @@ public class Schematic2Structure {
             /*
              * Read the blocklist csv file, and add all the items to the hashmap created above
              */
-            while((line = bufferedReader.readLine()) != null){
+            while ((line = bufferedReader.readLine()) != null) {
                 /*
                  * Split the line
                  * The data format is as follows:
@@ -56,7 +57,7 @@ public class Schematic2Structure {
                 String blockName = data[2];
 
                 // add to the map
-                blockMap.put(id,blockName);
+                blockMap.put(id, blockName);
 
             }
             // close current file
@@ -67,33 +68,52 @@ public class Schematic2Structure {
             bufferedReader = new BufferedReader(fileReader);
 
             // Read the properties file
-            while((line = bufferedReader.readLine())!= null){
+            while ((line = bufferedReader.readLine()) != null) {
                 String[] data = line.split("|");
 
                 String key = data[0];
                 String properties = data[1];
-                propertiesMap.put(key,properties);
+                propertiesMap.put(key, properties);
 
             }
 
-            FileInputStream inputStream = new FileInputStream(schematicFile);
-            schematicNBT = new NBTInputStream(inputStream);
+            // Open a new filestream for the schematic
+            FileInputStream fis = new FileInputStream(schematicFile);
+            schematicNBT = new NBTInputStream(fis);
 
-            Tag<CompoundMap> root = schematicNBT.readTag();
+            // get a CompoundMap of the schematic
+            CompoundMap schematicMap = (CompoundMap) schematicNBT.readTag().getValue();
 
-            CompoundMap m = root.getValue();
+            Tag height = schematicMap.get("Height");
+            Tag length = schematicMap.get("Length");
+            Tag width = schematicMap.get("Width");
+            short[] dimensions = new short[]{(short) height.getValue(), (short) length.getValue(), (short) width.getValue()};
 
-            System.out.println(m.values());
+            // validate the dimensions to ensure that structure is the right size
+            // (i.e 32 blocks or smaller in each dimension)
+            // this is done now, so that time isn't wasted reading all the blocks
+            if (!validateStructure(dimensions)) {
+                System.out.println("Structure is too large!");
+                return;
+            }
+
+            // Debug
+            System.out.println(schematicMap.values());
 
 
 
-        } catch (FileNotFoundException ex){
+
+        } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file " + ex.getMessage());
-        } catch (IOException ex){
+        } catch (IOException ex) {
             System.out.println("Error reading file");
-        } catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             System.out.println("Not a valid number");
         }
 
+    }
+
+    static private boolean validateStructure(short[] dimensions) {
+        return (dimensions[0] < 33 && dimensions[1] < 33 && dimensions[2] < 33);
     }
 }
