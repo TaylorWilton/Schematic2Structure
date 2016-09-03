@@ -2,26 +2,27 @@
  * Block Class - Contains information about each individual block in the structure
  */
 public class Block {
-    private int _id;
-    private String _properties;
-    private String _key;
-    private String _blockProperties;
-    private byte _data;
-    private String _name;
+    private int id;
+    private String properties;
+    private String key;
+    private String blockProperties;
+    private byte data;
+    private String name;
 
     /**
      * Block Constructor, creates individual block
      *
-     * @param _id   - block id associated with this block
-     * @param _name - name of the block
-     * @param _data - any block data
+     * @param id   - block id associated with this block
+     * @param name - name of the block
+     * @param data - any block data
      */
-    public Block(int _id, String _name, byte _data) {
-        this._id = _id;
-        this._name = _name;
+    public Block(int id, String name, byte data) {
+        this.id = id;
+        this.name = name;
+        this.data = data;
 
         // set the key of the object
-        this._key = _id + ":" + _data;
+        this.key = id + ":" + data;
 
     }
 
@@ -36,26 +37,26 @@ public class Block {
     @Override
     public int hashCode() {
 
-        return ((_id * 10) + _data) * 10;
+        return ((id * 10) + data) * 10;
     }
 
     public byte getData() {
-        return _data;
+        return data;
     }
 
     public String getProperties() {
-        return _properties;
+        return properties;
     }
 
     public String getKey() {
-        return _key;
+        return key;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
     public void setProperties(String _properties) {
-        this._properties = _properties;
+        this.properties = _properties;
     }
 }
