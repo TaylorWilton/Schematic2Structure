@@ -9,14 +9,14 @@ public class Schematic2Structure {
      * @param args - the file name of the schematic
      */
     public static void main(String args[]){
-        String blocksFile = "../res/blocks.csv";
-        String propertiesFile = "../res/properties.csv";
+        String blocksFile = "blocks.csv";
+        String propertiesFile = "properties.csv";
 
         HashMap<Integer,String> blockMap = new HashMap<>();
         HashMap<String,String> propertiesMap = new HashMap<>();
 
 
-        String line = null;
+        String line;
 
         try {
 
@@ -39,6 +39,7 @@ public class Schematic2Structure {
 
                 String[] data = line.split(",");
                 // the blockID that Minecraft uses
+                System.out.println(data[0]);
                 int id = Integer.parseInt(data[0]);
                 // the block name that Minecraft uses (ex minecraft:stone, rather than Stone)
                 String blockName = data[2];
@@ -65,14 +66,12 @@ public class Schematic2Structure {
             }
 
         } catch (FileNotFoundException ex){
-            System.out.println("Unable to open file");
+            System.out.println("Unable to open file " + ex.getMessage());
         } catch (IOException ex){
             System.out.println("Error reading file");
         } catch (NumberFormatException ex){
             System.out.println("Not a valid number");
         }
-
-
 
     }
 }
