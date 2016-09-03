@@ -1,10 +1,9 @@
-import com.flowpowered.nbt.CompoundMap;
-import com.flowpowered.nbt.Tag;
+import com.flowpowered.nbt.*;
 import com.flowpowered.nbt.stream.NBTInputStream;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Schematic2Structure {
 
@@ -24,8 +23,8 @@ public class Schematic2Structure {
         HashMap<Integer, String> blockMap = new HashMap<>();
         HashMap<String, String> propertiesMap = new HashMap<>();
 
-        HashMap<Integer,Block> palette = new HashMap<>();
-        LinkedList<Block> structureBlocks = new LinkedList<>();
+        HashMap<Integer, Block> palette = new HashMap<>();
+        ArrayList<Block> structureBlocks = new ArrayList<>();
 
         NBTInputStream schematicNBT;
 
@@ -69,7 +68,7 @@ public class Schematic2Structure {
 
             // Read the properties file
             while ((line = bufferedReader.readLine()) != null) {
-                String[] data = line.split("|");
+                String[] data = line.split("\\|");
 
                 String key = data[0];
                 String properties = data[1];
@@ -91,7 +90,7 @@ public class Schematic2Structure {
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
             // this is done now, so that time isn't wasted reading all the blocks
-            if (!validateStructure(height,width,length)) {
+            if (!validateStructure(height, width, length)) {
                 System.out.println("Structure is too large!");
                 return;
             }
@@ -99,34 +98,72 @@ public class Schematic2Structure {
             byte[] schematicBlocks = (byte[]) ((Tag) schematicMap.get("Blocks")).getValue();
             byte[] schematicBlockData = (byte[]) ((Tag) schematicMap.get("Data")).getValue();
 
-            for(int i = 0; i < schematicBlocks.length; i++){
+            for (int i = 0; i < schematicBlocks.length; i++) {
                 int blockId = schematicBlocks[i];
                 byte data = schematicBlockData[i];
 
                 String name = blockMap.get(blockId);
 
-                Block b = new Block(blockId,name,data);
+                Block b = new Block(blockId, name, data);
 
                 // add to the list of blocks
                 structureBlocks.add(b);
 
-
                 int hash = b.hashCode();
                 String key = b.getKey();
                 // get associated properties and set them for the block
-                if(propertiesMap.containsKey(key)){
+                if (propertiesMap.containsKey(key)) {
                     b.setProperties(propertiesMap.get(key));
                 }
                 // if the block isn't already in the palette, add it now
-                if(!palette.containsKey(hash)){
-                    palette.put(hash,b);
+                if (!palette.containsKey(hash)) {
+                    palette.put(hash, b);
                 }
-
 
             }
 
+            // ArrayList of compound tags, that will eventually become part of the palette in the structure
+            ArrayList<CompoundTag> paletteCompoundList = new ArrayList<>();
+
+            // Loop over items in palette
+            for (int i = 0; i < palette.values().toArray().length; i++) {
+                // current block
+                Block current = (Block) (palette.values().toArray())[i];
+
+
+                // properties
+                String blockProperties = current.getProperties();
+
+                // if the block has properties then loop though them and add them to a compound list
+                if (blockProperties != null && blockProperties.length() > 0) {
+                    CompoundMap blockMapCompound = new CompoundMap();
+                    String[] blockPropertiesArray = blockProperties.split(",");
+                    CompoundMap propertiesMapCompound = new CompoundMap();
+
+                    // Loop through the block properties
+                    for (int j = 0; j < blockPropertiesArray.length; j++) {
+                        String[] result = blockPropertiesArray[j].split(":");
+                        propertiesMapCompound.put(new StringTag(result[0], result[1]));
+                    }
+
+                    blockMapCompound.put("Properties", new CompoundTag("Properties", propertiesMapCompound));
+                    blockMapCompound.put("Name", new StringTag("Name", current.getName()));
+                    paletteCompoundList.add(new CompoundTag("", blockMapCompound));
+
+                } else { // otherwise just make a compound tag.
+                    CompoundMap blockMapCompound = new CompoundMap();
+                    blockMapCompound.put("Name", new StringTag("Name", current.getName()));
+                    paletteCompoundList.add(new CompoundTag("", blockMapCompound));
+                }
+
+            }
+            ListTag paletteListTag = new ListTag("palette", CompoundTag.class, paletteCompoundList);
+
+
             // Debug
-            System.out.println(schematicMap.values());
+            // System.out.println(schematicMap.values());
+
+            System.out.println(paletteListTag);
 
 
         } catch (FileNotFoundException ex) {
