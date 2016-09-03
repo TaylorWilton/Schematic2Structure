@@ -1,14 +1,12 @@
 import com.flowpowered.nbt.CompoundMap;
-import com.flowpowered.nbt.CompoundTag;
 import com.flowpowered.nbt.Tag;
-import com.flowpowered.nbt.gui.NBTViewer;
 import com.flowpowered.nbt.stream.NBTInputStream;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Schematic2Structure {
-
 
     /**
      * Main Method
@@ -26,8 +24,10 @@ public class Schematic2Structure {
         HashMap<Integer, String> blockMap = new HashMap<>();
         HashMap<String, String> propertiesMap = new HashMap<>();
 
-        NBTInputStream schematicNBT;
+        HashMap<Integer,Block> palette = new HashMap<>();
+        LinkedList<Block> structureBlocks = new LinkedList<>();
 
+        NBTInputStream schematicNBT;
 
         String line;
 
@@ -84,23 +84,49 @@ public class Schematic2Structure {
             // get a CompoundMap of the schematic
             CompoundMap schematicMap = (CompoundMap) schematicNBT.readTag().getValue();
 
-            Tag height = schematicMap.get("Height");
-            Tag length = schematicMap.get("Length");
-            Tag width = schematicMap.get("Width");
-            short[] dimensions = new short[]{(short) height.getValue(), (short) length.getValue(), (short) width.getValue()};
+            short height = (short) ((Tag) schematicMap.get("Height")).getValue();
+            short width = (short) ((Tag) schematicMap.get("Width")).getValue();
+            short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
             // this is done now, so that time isn't wasted reading all the blocks
-            if (!validateStructure(dimensions)) {
+            if (!validateStructure(height,width,length)) {
                 System.out.println("Structure is too large!");
                 return;
             }
 
+            byte[] schematicBlocks = (byte[]) ((Tag) schematicMap.get("Blocks")).getValue();
+            byte[] schematicBlockData = (byte[]) ((Tag) schematicMap.get("Data")).getValue();
+
+            for(int i = 0; i < schematicBlocks.length; i++){
+                int blockId = schematicBlocks[i];
+                byte data = schematicBlockData[i];
+
+                String name = blockMap.get(blockId);
+
+                Block b = new Block(blockId,name,data);
+
+                // add to the list of blocks
+                structureBlocks.add(b);
+
+
+                int hash = b.hashCode();
+                String key = b.getKey();
+                // get associated properties and set them for the block
+                if(propertiesMap.containsKey(key)){
+                    b.setProperties(propertiesMap.get(key));
+                }
+                // if the block isn't already in the palette, add it now
+                if(!palette.containsKey(hash)){
+                    palette.put(hash,b);
+                }
+
+
+            }
+
             // Debug
             System.out.println(schematicMap.values());
-
-
 
 
         } catch (FileNotFoundException ex) {
@@ -113,7 +139,7 @@ public class Schematic2Structure {
 
     }
 
-    static private boolean validateStructure(short[] dimensions) {
-        return (dimensions[0] < 33 && dimensions[1] < 33 && dimensions[2] < 33);
+    static private boolean validateStructure(short h, short w, short l) {
+        return (h < 33 && w < 33 && l < 33);
     }
 }
