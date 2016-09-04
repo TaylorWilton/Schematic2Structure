@@ -15,9 +15,14 @@ public class Schematic2Structure {
     public static void main(String args[]) {
         String blocksFile = "blocks.csv";
         String propertiesFile = "properties.csv";
+        String schematicFile;
 
-        // TODO: Validation
-        String schematicFile = args[0];
+        if (!validateSchematicFile(args[0])) {
+            return;
+        } else {
+            schematicFile = args[0];
+        }
+
 
         // hashmaps for blocks & properties respectively
         HashMap<Integer, String> blockMap = new HashMap<>();
@@ -246,5 +251,17 @@ public class Schematic2Structure {
      */
     static boolean validateStructure(int h, int w, int l) {
         return ((h < 33 && w < 33 && l < 33) && (h > 0 && w > 0 && l > 0));
+    }
+
+    /**
+     * Validation of the schematic filename
+     * first - test to see if it ends with '.schematic'
+     *
+     * @param schematicFilename the name of the file we're opening
+     * @return whether the file is a valid schematic or not
+     */
+    static boolean validateSchematicFile(String schematicFilename){
+        String ext = (schematicFilename.split(","))[1];
+        return ext.compareTo("schematic") == 0;
     }
 }
