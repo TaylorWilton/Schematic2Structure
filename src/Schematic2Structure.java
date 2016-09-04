@@ -1,10 +1,9 @@
-import com.flowpowered.nbt.*;
-import com.flowpowered.nbt.stream.NBTInputStream;
-import com.flowpowered.nbt.stream.NBTOutputStream;
+import org.jnbt.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Schematic2Structure {
 
@@ -81,20 +80,20 @@ public class Schematic2Structure {
             FileInputStream fis = new FileInputStream(schematicFile);
             schematicNBT = new NBTInputStream(fis);
 
-            // get a CompoundMap of the schematic
-            CompoundMap schematicMap = (CompoundMap) schematicNBT.readTag().getValue();
+            // get a HashMap of the schematic
+            Map<String, Tag> schematicMap = (Map<String, Tag>) schematicNBT.readTag().getValue();
 
             short height = (short) ((Tag) schematicMap.get("Height")).getValue();
             short width = (short) ((Tag) schematicMap.get("Width")).getValue();
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
-            ArrayList<ShortTag> sizeList = new ArrayList<>();
-            sizeList.add(new ShortTag("", length));
-            sizeList.add(new ShortTag("", height));
-            sizeList.add(new ShortTag("", width));
+            ArrayList<Tag> sizeList = new ArrayList<>();
+            sizeList.add(new IntTag("length", length));
+            sizeList.add(new IntTag("width", height));
+            sizeList.add(new IntTag("height", width));
 
 
-            ListTag sizeListTag = new ListTag("size", ShortTag.class, sizeList);
+            ListTag sizeListTag = new ListTag("size", IntTag.class, sizeList);
 
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
@@ -106,8 +105,8 @@ public class Schematic2Structure {
 
 
             // note - java byte's are signed...
-            byte[] schematicBlocks = (byte[]) ((Tag) schematicMap.get("Blocks")).getValue();
-            byte[] schematicBlockData = (byte[]) ((Tag) schematicMap.get("Data")).getValue();
+            byte[] schematicBlocks = (byte[]) schematicMap.get("Blocks").getValue();
+            byte[] schematicBlockData = (byte[]) schematicMap.get("Data").getValue();
 
             for (int i = 0; i < schematicBlocks.length; i++) {
                 int blockId = schematicBlocks[i] & 0xff;
@@ -134,7 +133,7 @@ public class Schematic2Structure {
             }
 
             // ArrayList of compound tags, that will eventually become part of the palette in the structure
-            ArrayList<CompoundTag> paletteCompoundList = new ArrayList<>();
+            ArrayList<Tag> paletteCompoundList = new ArrayList<>();
 
             // Loop over items in palette
             for (int i = 0; i < palette.values().toArray().length; i++) {
@@ -146,29 +145,29 @@ public class Schematic2Structure {
 
                 // if the block has properties then loop though them and add them to a compound list
                 if (blockProperties != null && blockProperties.length() > 0) {
-                    CompoundMap blockMapCompound = new CompoundMap();
+                    HashMap<String, Tag> blockMapCompound = new HashMap<String, Tag>();
                     String[] blockPropertiesArray = blockProperties.split(",");
-                    CompoundMap propertiesMapCompound = new CompoundMap();
+                    HashMap<String, Tag> propertiesMapCompound = new HashMap<String, Tag>();
 
                     // Loop through the block properties
                     for (int j = 0; j < blockPropertiesArray.length; j++) {
-                        String[] result = blockPropertiesArray[j].split(":");
-                        propertiesMapCompound.put(new StringTag(result[0], result[1]));
+                        String blockProperty = blockPropertiesArray[j];
+                        String[] result = blockProperty.split(":");
+                        propertiesMapCompound.put(String.valueOf(j), new StringTag(result[0], result[1]));
                     }
-
                     blockMapCompound.put("Properties", new CompoundTag("Properties", propertiesMapCompound));
                     blockMapCompound.put("Name", new StringTag("Name", current.getName()));
-                    paletteCompoundList.add(new CompoundTag("", blockMapCompound));
+                    paletteCompoundList.add(new CompoundTag("block", blockMapCompound));
 
                 } else { // otherwise just make a compound tag.
-                    CompoundMap blockMapCompound = new CompoundMap();
+                    HashMap<String, Tag> blockMapCompound = new HashMap<>();
                     blockMapCompound.put("Name", new StringTag("Name", current.getName()));
-                    paletteCompoundList.add(new CompoundTag("", blockMapCompound));
+                    paletteCompoundList.add(new CompoundTag("block", blockMapCompound));
                 }
 
             }
             ListTag paletteListTag = new ListTag("palette", CompoundTag.class, paletteCompoundList);
-            ArrayList<CompoundTag> blockCompoundList = new ArrayList<>();
+            ArrayList<Tag> blockCompoundList = new ArrayList<>();
 
             Object[] hashesArray = palette.keySet().toArray();
 
@@ -189,17 +188,18 @@ public class Schematic2Structure {
 
                         int index = paletteHashes.indexOf(current.hashCode());
 
-                        CompoundMap itemMap = new CompoundMap();
-                        ArrayList<IntTag> pos = new ArrayList<>(3);
-                        pos.add(new IntTag("", z));
-                        pos.add(new IntTag("", y));
-                        pos.add(new IntTag("", x));
+                        HashMap<String, Tag> itemMap = new HashMap<String, Tag>();
+                        ArrayList<Tag> pos = new ArrayList<>(3);
+
+                        pos.add(new IntTag("x", z));
+                        pos.add(new IntTag("y", y));
+                        pos.add(new IntTag("z", x));
 
 
                         itemMap.put("pos", new ListTag("pos", IntTag.class, pos));
                         itemMap.put("state", new IntTag("state", index));
 
-                        CompoundTag blockCompound = new CompoundTag("", itemMap);
+                        CompoundTag blockCompound = new CompoundTag("block", itemMap);
 
                         blockCompoundList.add(blockCompound);
                     }
@@ -208,24 +208,21 @@ public class Schematic2Structure {
 
             ListTag blockListTag = new ListTag("blocks", CompoundTag.class, blockCompoundList);
 
-            CompoundMap structureMap = new CompoundMap();
+            HashMap<String, Tag> structureMap = new HashMap<>();
             structureMap.put("blocks", blockListTag);
             structureMap.put("palette", paletteListTag);
             structureMap.put("size", sizeListTag);
-            structureMap.put(new StringTag("author", "KingAmles"));
-            structureMap.put(new IntTag("version", 1));
+            structureMap.put("author", new StringTag("author", "KingAmles"));
+            structureMap.put("version", new IntTag("version", 1));
 
             CompoundTag structureTag = new CompoundTag("structure", structureMap);
 
-            System.out.println(structureTag);
+            //System.out.println(structureTag);
 
             FileOutputStream fos = new FileOutputStream("output.nbt");
-            NBTOutputStream NBToutput = new NBTOutputStream(fos, true);
+            NBTOutputStream NBToutput = new NBTOutputStream(fos);
 
             NBToutput.writeTag(structureTag);
-
-            NBToutput.flush();
-
             NBToutput.close();
 
 
