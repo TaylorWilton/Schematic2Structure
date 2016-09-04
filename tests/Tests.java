@@ -1,6 +1,9 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class Tests {
     @Test
     public void TestSizeValidation(){
@@ -25,6 +28,17 @@ public class Tests {
     @Test
     public void TestFileNameValidation(){
         Assert.assertTrue("tests not yet implemented", false);
+    }
+    @Test
+    public void TestTooLargeFile(){
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+         Schematic2Structure.main(new String[]{"schematics/luxury-house.schematic"});
+        // includes CRLF
+        String expected = "Structure is too large!\r\n";
+
+        Assert.assertEquals("Program should notify user than structure is too large", outContent.toString(),expected);
     }
 
 }
