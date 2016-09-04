@@ -5,7 +5,6 @@ public class Block {
     private int id;
     private String properties;
     private String key;
-    private String blockProperties;
     private int data;
     private String name;
 
@@ -38,10 +37,6 @@ public class Block {
     public int hashCode() {
 
         return ((id * 10) + data) * 10;
-    }
-
-    public int getData() {
-        return data;
     }
 
     public String getProperties() {
