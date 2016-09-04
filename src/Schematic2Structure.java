@@ -23,7 +23,6 @@ public class Schematic2Structure {
             schematicFile = args[0];
         }
 
-
         // hashmaps for blocks & properties respectively
         HashMap<Integer, String> blockMap = new HashMap<>();
         HashMap<String, String> propertiesMap = new HashMap<>();
@@ -224,7 +223,9 @@ public class Schematic2Structure {
 
             //System.out.println(structureTag);
 
-            FileOutputStream fos = new FileOutputStream("output.nbt");
+            String output = (schematicFile.split("\\."))[0] + ".nbt";
+            System.out.println(output);
+            FileOutputStream fos = new FileOutputStream(output);
             NBTOutputStream NBToutput = new NBTOutputStream(fos);
 
             NBToutput.writeTag(structureTag);
@@ -261,7 +262,7 @@ public class Schematic2Structure {
      * @return whether the file is a valid schematic or not
      */
     static boolean validateSchematicFile(String schematicFilename){
-        String ext = (schematicFilename.split(","))[1];
+        String ext = (schematicFilename.split("\\."))[1];
         return ext.compareTo("schematic") == 0;
     }
 }
