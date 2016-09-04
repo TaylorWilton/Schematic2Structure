@@ -239,7 +239,15 @@ public class Schematic2Structure {
 
     }
 
-    static private boolean validateStructure(short h, short w, short l) {
-        return (h < 33 && w < 33 && l < 33);
+    /**
+     * validates the structure parameters to make sure that the structure is a valid size
+     *
+     * @param h height
+     * @param w width
+     * @param l length
+     * @return true if valid, false if invalid
+     */
+    static boolean validateStructure(int h, int w, int l) {
+        return ((h < 33 && w < 33 && l < 33) && (h > 0 && w > 0 && l > 0));
     }
 }
