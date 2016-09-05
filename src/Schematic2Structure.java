@@ -18,9 +18,16 @@ public class Schematic2Structure {
         String schematicFile;
 
         if (!validateSchematicFile(args[0])) {
+            String usage = String.format("Usage: Schematic2Structure <schematic-file> <output-file>\n" +
+                    "\t\t<schematic-file> - a Schematic File created by a program like MCEdit or MC Noteblock Studio, with the .schematic extension\n" +
+                    "\t\t<output-location> - where you want the resulting nbt structure to be saved\n" +
+                    "\t\t(this is optional, and if not provided, will default to the name of the schematic file with the .nbt extension)");
+
+            System.out.println(usage);
             return;
         } else {
             schematicFile = args[0];
+            System.out.println("Converting Schematic file " + schematicFile);
         }
 
         // hashmaps for blocks & properties respectively
@@ -182,8 +189,7 @@ public class Schematic2Structure {
             }
 
             // loop over all the blocks
-            //Sorted by height (bottom to top) then length then width -- the index of the block at X,Y,Z is (Y×length + Z)×width + X
-
+            // Sorted by height (bottom to top) then length then width -- the index of the block at X,Y,Z is (Y×length + Z)×width + X
             for (int z = 0; z < length; z++) {
                 for (int y = 0; y < height; y++) {
                     for (int x = 0; x < width; x++) {
@@ -221,10 +227,8 @@ public class Schematic2Structure {
 
             CompoundTag structureTag = new CompoundTag("structure", structureMap);
 
-            //System.out.println(structureTag);
-
             String output = (schematicFile.split("\\."))[0] + ".nbt";
-            System.out.println(output);
+            System.out.println("Structure saved at " + output);
             FileOutputStream fos = new FileOutputStream(output);
             NBTOutputStream NBToutput = new NBTOutputStream(fos);
 
@@ -261,8 +265,9 @@ public class Schematic2Structure {
      * @param schematicFilename the name of the file we're opening
      * @return whether the file is a valid schematic or not
      */
-    static boolean validateSchematicFile(String schematicFilename){
+    static boolean validateSchematicFile(String schematicFilename) {
         String ext = (schematicFilename.split("\\."))[1];
         return ext.compareTo("schematic") == 0;
     }
+
 }

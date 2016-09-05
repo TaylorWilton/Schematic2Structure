@@ -40,5 +40,15 @@ public class Tests {
 
         Assert.assertEquals("Program should notify user than structure is too large", outContent.toString(),expected);
     }
+    @Test
+    public void TestInvalidFileName(){
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        Schematic2Structure.main(new String[]{"schematics/invalid-file.png"});
+        System.out.println(outContent.toString());
+
+
+    }
 
 }
