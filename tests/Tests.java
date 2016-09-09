@@ -36,7 +36,7 @@ public class Tests {
 
          Schematic2Structure.main(new String[]{"schematics/luxury-house.schematic"});
         // includes CRLF
-        String expected = "Structure is too large!\r\n";
+        String expected = "Converting Schematic file schematics/luxury-house.schematic\r\nStructure is too large!\r\n";
 
         Assert.assertEquals("Program should notify user than structure is too large", outContent.toString(),expected);
     }

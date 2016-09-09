@@ -227,6 +227,8 @@ public class Schematic2Structure {
 
             CompoundTag structureTag = new CompoundTag("structure", structureMap);
 
+            System.out.println(structureTag.toString());
+
             String output = (schematicFile.split("\\."))[0] + ".nbt";
             System.out.println("Structure saved at " + output);
             FileOutputStream fos = new FileOutputStream(output);
