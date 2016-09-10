@@ -18,7 +18,7 @@ class Entity {
         Map<String, Tag> entityMap = ct.getValue();
 
         // get pos list, we can reuse it
-        List<Tag> posList = (List<Tag>) entityMap.get("Pos");
+        List<Tag> posList = (List<Tag>) entityMap.get("Pos").getValue();
 
         // block pos is just integer version of normal position
         ArrayList<Tag> blockPosList = new ArrayList<>();
