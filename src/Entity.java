@@ -5,11 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Entity {
-    private String id;
-    private CompoundTag root;
-    private ArrayList<Tag> blockPosList;
-    private ArrayList<Tag> posList;
+class Entity {
     private CompoundTag entityTag;
 
     /**
@@ -17,7 +13,7 @@ public class Entity {
      *
      * @param ct - the root tag of the entity
      */
-    public Entity(CompoundTag ct) {
+    Entity(CompoundTag ct) {
         // get a map of all the tags
         Map<String, Tag> entityMap = ct.getValue();
 
@@ -26,20 +22,12 @@ public class Entity {
 
         // block pos is just integer version of normal position
         ArrayList<Tag> blockPosList = new ArrayList<>();
-        blockPosList.add(new IntTag("x", ((DoubleTag)posList.get(0)).getValue().intValue()));
-        blockPosList.add(new IntTag("y", ((DoubleTag)posList.get(1)).getValue().intValue()));
-        blockPosList.add(new IntTag("z", ((DoubleTag)posList.get(2)).getValue().intValue()));
-
-
-        // save for further use
-        this.posList = (ArrayList<Tag>) posList;
-        this.blockPosList = blockPosList;
-
-        // get id
-        this.id = (String) entityMap.get("id").getValue();
+        blockPosList.add(new IntTag("x", ((DoubleTag) posList.get(0)).getValue().intValue()));
+        blockPosList.add(new IntTag("y", ((DoubleTag) posList.get(1)).getValue().intValue()));
+        blockPosList.add(new IntTag("z", ((DoubleTag) posList.get(2)).getValue().intValue()));
 
         // save compound tag, so we can deal with the rest of the stuff later
-        root = ct;
+        CompoundTag root = ct;
 
         // make a hashmap for the tags
         HashMap<String, Tag> entity = new HashMap<>();
@@ -57,7 +45,7 @@ public class Entity {
      *
      * @return - a CompoundTag formatted correctly for Mojang's NBT Structure Specifications
      */
-    public CompoundTag getStructureFormat() {
+    CompoundTag getStructureFormat() {
         return entityTag;
     }
 }
