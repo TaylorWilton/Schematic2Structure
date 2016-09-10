@@ -19,10 +19,10 @@ public class Schematic2Structure {
         String schematicFile;
 
         if (!validateSchematicFile(args[0])) {
-            String usage = String.format("Usage: Schematic2Structure <schematic-file> <output-file>\n" +
+            String usage = "Usage: Schematic2Structure <schematic-file> <output-file>\n" +
                     "\t\t<schematic-file> - a Schematic File created by a program like MCEdit or MC Noteblock Studio, with the .schematic extension\n" +
                     "\t\t<output-location> - where you want the resulting nbt structure to be saved\n" +
-                    "\t\t(this is optional, and if not provided, will default to the name of the schematic file with the .nbt extension)");
+                    "\t\t(this is optional, and if not provided, will default to the name of the schematic file with the .nbt extension)";
 
             System.out.println(usage);
             return;
@@ -180,9 +180,9 @@ public class Schematic2Structure {
 
                 // if the block has properties then loop though them and add them to a compound list
                 if (blockProperties != null && blockProperties.length() > 0) {
-                    HashMap<String, Tag> blockMapCompound = new HashMap<String, Tag>();
+                    HashMap<String, Tag> blockMapCompound = new HashMap<>();
                     String[] blockPropertiesArray = blockProperties.split(",");
-                    HashMap<String, Tag> propertiesMapCompound = new HashMap<String, Tag>();
+                    HashMap<String, Tag> propertiesMapCompound = new HashMap<>();
 
                     // Loop through the block properties
                     for (int j = 0; j < blockPropertiesArray.length; j++) {
@@ -222,7 +222,7 @@ public class Schematic2Structure {
 
                         int index = paletteHashes.indexOf(current.hashCode());
 
-                        HashMap<String, Tag> itemMap = new HashMap<String, Tag>();
+                        HashMap<String, Tag> itemMap = new HashMap<>();
                         ArrayList<Tag> pos = new ArrayList<>(3);
 
                         pos.add(new IntTag("x", z));

@@ -27,14 +27,13 @@ class Entity {
         blockPosList.add(new IntTag("z", ((DoubleTag) posList.get(2)).getValue().intValue()));
 
         // save compound tag, so we can deal with the rest of the stuff later
-        CompoundTag root = ct;
 
         // make a hashmap for the tags
         HashMap<String, Tag> entity = new HashMap<>();
         // chuck everything in it
         entity.put("pos", new ListTag("pos", DoubleTag.class, posList));
         entity.put("blockPos", new ListTag("blockPos", IntTag.class, blockPosList));
-        entity.put("nbt", root);// hope this works
+        entity.put("nbt", ct);// hope this works
         // make it a tag!
         entityTag = new CompoundTag("Entity", entity);
 
