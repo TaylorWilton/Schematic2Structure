@@ -121,7 +121,7 @@ public class Schematic2Structure {
             }
             // do it all over again for tile entities
             for(CompoundTag ct : tileEntitles){
-                Entity e = new Entity(ct);
+                TileEntity e = new TileEntity(ct);
                 CompoundTag entityTag = e.getStructureFormat();
                 entityList.add(entityTag);
             }
