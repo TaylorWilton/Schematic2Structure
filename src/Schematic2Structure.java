@@ -3,6 +3,7 @@ import org.jnbt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Schematic2Structure {
@@ -18,10 +19,10 @@ public class Schematic2Structure {
         String schematicFile;
 
         if (!validateSchematicFile(args[0])) {
-            String usage = String.format("Usage: Schematic2Structure <schematic-file> <output-file>\n" +
+            String usage = "Usage: Schematic2Structure <schematic-file> <output-file>\n" +
                     "\t\t<schematic-file> - a Schematic File created by a program like MCEdit or MC Noteblock Studio, with the .schematic extension\n" +
                     "\t\t<output-location> - where you want the resulting nbt structure to be saved\n" +
-                    "\t\t(this is optional, and if not provided, will default to the name of the schematic file with the .nbt extension)");
+                    "\t\t(this is optional, and if not provided, will default to the name of the schematic file with the .nbt extension)";
 
             System.out.println(usage);
             return;
@@ -36,6 +37,9 @@ public class Schematic2Structure {
 
         HashMap<Integer, Block> palette = new HashMap<>();
         ArrayList<Block> structureBlocks = new ArrayList<>();
+
+        // list for entities
+        ArrayList<Tag> entityList = new ArrayList<>();
 
         NBTInputStream schematicNBT;
 
@@ -84,7 +88,6 @@ public class Schematic2Structure {
                 String key = data[0];
                 String properties = data[1];
                 propertiesMap.put(key, properties);
-
             }
 
             // Open a new filestream for the schematic
@@ -98,12 +101,33 @@ public class Schematic2Structure {
             short width = (short) ((Tag) schematicMap.get("Width")).getValue();
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
+            // get entities & tile entitites, but keep them in their current form for now
+            List<CompoundTag> entities = (List<CompoundTag>) schematicMap.get("Entities").getValue();
+            List<CompoundTag> tileEntitles = (List<CompoundTag>) schematicMap.get("TileEntities").getValue();
+
+            // set up size list now, because we have the data and we can move on now
             ArrayList<Tag> sizeList = new ArrayList<>();
             sizeList.add(new IntTag("length", length));
             sizeList.add(new IntTag("width", height));
             sizeList.add(new IntTag("height", width));
 
+            // loop through the entities - think of the overhead
+            for (CompoundTag ct : entities) {
+                Entity e = new Entity(ct);
+                // get the compound tag
+                CompoundTag entityTag = e.getStructureFormat();
+                // chuck it in the list
+                entityList.add(entityTag);
+            }
+            // do it all over again for tile entities
+            for(CompoundTag ct : tileEntitles){
+                Entity e = new Entity(ct);
+                CompoundTag entityTag = e.getStructureFormat();
+                entityList.add(entityTag);
+            }
 
+
+            ListTag entityListTag = new ListTag("entities", CompoundTag.class, entityList);
             ListTag sizeListTag = new ListTag("size", IntTag.class, sizeList);
 
             // validate the dimensions to ensure that structure is the right size
@@ -156,9 +180,9 @@ public class Schematic2Structure {
 
                 // if the block has properties then loop though them and add them to a compound list
                 if (blockProperties != null && blockProperties.length() > 0) {
-                    HashMap<String, Tag> blockMapCompound = new HashMap<String, Tag>();
+                    HashMap<String, Tag> blockMapCompound = new HashMap<>();
                     String[] blockPropertiesArray = blockProperties.split(",");
-                    HashMap<String, Tag> propertiesMapCompound = new HashMap<String, Tag>();
+                    HashMap<String, Tag> propertiesMapCompound = new HashMap<>();
 
                     // Loop through the block properties
                     for (int j = 0; j < blockPropertiesArray.length; j++) {
@@ -198,7 +222,7 @@ public class Schematic2Structure {
 
                         int index = paletteHashes.indexOf(current.hashCode());
 
-                        HashMap<String, Tag> itemMap = new HashMap<String, Tag>();
+                        HashMap<String, Tag> itemMap = new HashMap<>();
                         ArrayList<Tag> pos = new ArrayList<>(3);
 
                         pos.add(new IntTag("x", z));
@@ -221,13 +245,12 @@ public class Schematic2Structure {
             HashMap<String, Tag> structureMap = new HashMap<>();
             structureMap.put("blocks", blockListTag);
             structureMap.put("palette", paletteListTag);
+            structureMap.put("entities", entityListTag);
             structureMap.put("size", sizeListTag);
             structureMap.put("author", new StringTag("author", "KingAmles"));
             structureMap.put("version", new IntTag("version", 1));
 
             CompoundTag structureTag = new CompoundTag("structure", structureMap);
-
-            System.out.println(structureTag.toString());
 
             String output = (schematicFile.split("\\."))[0] + ".nbt";
             System.out.println("Structure saved at " + output);
@@ -245,9 +268,7 @@ public class Schematic2Structure {
         } catch (NumberFormatException ex) {
             System.out.println("Not a valid number");
         }
-
     }
-
     /**
      * validates the structure parameters to make sure that the structure is a valid size
      *
