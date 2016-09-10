@@ -38,6 +38,9 @@ public class Schematic2Structure {
         HashMap<Integer, Block> palette = new HashMap<>();
         ArrayList<Block> structureBlocks = new ArrayList<>();
 
+        // list for entities
+        ArrayList<Tag> entityList = new ArrayList<>();
+
         NBTInputStream schematicNBT;
 
         String line;
@@ -100,7 +103,7 @@ public class Schematic2Structure {
 
             // get entities & tile entitites, but keep them in their current form for now
             List<CompoundTag> entities = (List<CompoundTag>) schematicMap.get("Entities").getValue();
-            List<CompoundTag> tileEntitles =  (List<CompoundTag>) schematicMap.get("TileEntities").getValue();
+            List<CompoundTag> tileEntitles = (List<CompoundTag>) schematicMap.get("TileEntities").getValue();
 
             // set up size list now, because we have the data and we can move on now
             ArrayList<Tag> sizeList = new ArrayList<>();
@@ -108,10 +111,23 @@ public class Schematic2Structure {
             sizeList.add(new IntTag("width", height));
             sizeList.add(new IntTag("height", width));
 
-            for(CompoundTag ct : entities){
-
+            // loop through the entities - think of the overhead
+            for (CompoundTag ct : entities) {
+                Entity e = new Entity(ct);
+                // get the compound tag
+                CompoundTag entityTag = e.getStructureFormat();
+                // chuck it in the list
+                entityList.add(entityTag);
+            }
+            // do it all over again for tile entities
+            for(CompoundTag ct : tileEntitles){
+                Entity e = new Entity(ct);
+                CompoundTag entityTag = e.getStructureFormat();
+                entityList.add(entityTag);
             }
 
+
+            ListTag entityListTag = new ListTag("entities", CompoundTag.class, entityList);
             ListTag sizeListTag = new ListTag("size", IntTag.class, sizeList);
 
             // validate the dimensions to ensure that structure is the right size
@@ -251,9 +267,7 @@ public class Schematic2Structure {
         } catch (NumberFormatException ex) {
             System.out.println("Not a valid number");
         }
-
     }
-
     /**
      * validates the structure parameters to make sure that the structure is a valid size
      *
