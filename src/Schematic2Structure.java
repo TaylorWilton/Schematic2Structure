@@ -3,6 +3,7 @@ import org.jnbt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Schematic2Structure {
@@ -84,7 +85,6 @@ public class Schematic2Structure {
                 String key = data[0];
                 String properties = data[1];
                 propertiesMap.put(key, properties);
-
             }
 
             // Open a new filestream for the schematic
@@ -98,11 +98,19 @@ public class Schematic2Structure {
             short width = (short) ((Tag) schematicMap.get("Width")).getValue();
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
+            // get entities & tile entitites, but keep them in their current form for now
+            List<CompoundTag> entities = (List<CompoundTag>) schematicMap.get("Entities").getValue();
+            List<CompoundTag> tileEntitles =  (List<CompoundTag>) schematicMap.get("TileEntities").getValue();
+
+            // set up size list now, because we have the data and we can move on now
             ArrayList<Tag> sizeList = new ArrayList<>();
             sizeList.add(new IntTag("length", length));
             sizeList.add(new IntTag("width", height));
             sizeList.add(new IntTag("height", width));
 
+            for(CompoundTag ct : entities){
+
+            }
 
             ListTag sizeListTag = new ListTag("size", IntTag.class, sizeList);
 
@@ -226,8 +234,6 @@ public class Schematic2Structure {
             structureMap.put("version", new IntTag("version", 1));
 
             CompoundTag structureTag = new CompoundTag("structure", structureMap);
-
-            System.out.println(structureTag.toString());
 
             String output = (schematicFile.split("\\."))[0] + ".nbt";
             System.out.println("Structure saved at " + output);
