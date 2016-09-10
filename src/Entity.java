@@ -33,7 +33,15 @@ class Entity {
         // chuck everything in it
         entity.put("pos", new ListTag("pos", DoubleTag.class, posList));
         entity.put("blockPos", new ListTag("blockPos", IntTag.class, blockPosList));
-        entity.put("nbt", ct);// hope this works
+
+        // get the data, put it in a map
+        Map<String, Tag> rootTag = ct.getValue();
+        // then make it a tag again
+        // just so it says "nbt"
+        CompoundTag entityNBTTag = new CompoundTag("nbt", rootTag);
+
+
+        entity.put("nbt", entityNBTTag);// hope this works
         // make it a tag!
         entityTag = new CompoundTag("Entity", entity);
 

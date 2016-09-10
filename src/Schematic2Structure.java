@@ -245,6 +245,7 @@ public class Schematic2Structure {
             HashMap<String, Tag> structureMap = new HashMap<>();
             structureMap.put("blocks", blockListTag);
             structureMap.put("palette", paletteListTag);
+            structureMap.put("entities", entityListTag);
             structureMap.put("size", sizeListTag);
             structureMap.put("author", new StringTag("author", "KingAmles"));
             structureMap.put("version", new IntTag("version", 1));
