@@ -3,11 +3,19 @@ Schematic2Structure is a utility to convert .schematic files to Minecraft's .nbt
 It's currently in a development stage, so not everything works properly yet. 
 
 ## Usage
-Schematic2Structure currently runs from the commandline
+1. Compile the source files
 
-`java Schematic2Structure.java <schematic>`
+  if on windows: 
+  - `javac -cp ";lib/JNBT_1.4.jar" src/*.java `
+  
+  
+  if on UNIX/Mac
+  - `javac -cp ";lib/JNBT_1.4.jar" src/*.java`
+
+2. `java Schematic2Structure <schematic>`
 
 where `<schematic>` is the filename of a [MCEdit](http://www.mcedit.net/) Schematic. 
+
 
 ## Known Issues
 - blocks from MC 1.11 aren't included yet, and therefore don't work
