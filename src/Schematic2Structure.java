@@ -97,8 +97,8 @@ public class Schematic2Structure {
             // get a HashMap of the schematic
             Map<String, Tag> schematicMap = (Map<String, Tag>) schematicNBT.readTag().getValue();
 
-            short height = (short) ((Tag) schematicMap.get("Height")).getValue();
-            short width = (short) ((Tag) schematicMap.get("Width")).getValue();
+            short width = (short) ((Tag) schematicMap.get("Height")).getValue();
+            short height = (short) ((Tag) schematicMap.get("Width")).getValue();
             short length = (short) ((Tag) schematicMap.get("Length")).getValue();
 
             // get entities & tile entitites, but keep them in their current form for now
@@ -108,8 +108,8 @@ public class Schematic2Structure {
             // set up size list now, because we have the data and we can move on now
             ArrayList<Tag> sizeList = new ArrayList<>();
             sizeList.add(new IntTag("length", length));
-            sizeList.add(new IntTag("width", height));
-            sizeList.add(new IntTag("height", width));
+            sizeList.add(new IntTag("width", width));
+            sizeList.add(new IntTag("height", height));
 
             // loop through the entities - think of the overhead
             for (CompoundTag ct : entities) {
@@ -133,7 +133,7 @@ public class Schematic2Structure {
             // validate the dimensions to ensure that structure is the right size
             // (i.e 32 blocks or smaller in each dimension)
             // this is done now, so that time isn't wasted reading all the blocks
-            if (!validateStructure(height, width, length)) {
+            if (!validateStructure(width, height, length)) {
                 System.out.println("Structure is too large!");
                 return;
             }
@@ -215,9 +215,9 @@ public class Schematic2Structure {
             // loop over all the blocks
             // Sorted by height (bottom to top) then length then width -- the index of the block at X,Y,Z is (Y×length + Z)×width + X
             for (int z = 0; z < length; z++) {
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        int position = (y * length + z) * width + x;
+                for (int y = 0; y < width; y++) {
+                    for (int x = 0; x < height; x++) {
+                        int position = (y * length + z) * height + x;
                         Block current = structureBlocks.get(position);
 
                         int index = paletteHashes.indexOf(current.hashCode());
